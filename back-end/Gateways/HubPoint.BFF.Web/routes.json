@@ -1,0 +1,33 @@
+﻿{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/{catch-all}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5101
+        }
+      ],
+      "UpstreamPathTemplate": "/api/identity/{catch-all}"
+    },
+    {
+      "DownstreamPathTemplate": "/{catch-all}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5102
+        }
+      ],
+      "UpstreamPathTemplate": "/api/security/{catch-all}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      }
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "http://localhost:5100"
+  }
+}
