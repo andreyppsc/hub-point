@@ -1,27 +1,25 @@
-﻿namespace HubPoint.Services.Security.Api.Controllers;
+﻿using HubPoint.Services.Common.Abstractions.Commands;
+using HubPoint.Services.Security.Api.Application;
+using MassTransit.Mediator;
 
-[Authorize]
+namespace HubPoint.Services.Security.Api.Controllers;
+
 [ApiController]
 [Route("users")]
 public class UsersController : ControllerBase
 {
-    [HttpGet]
-    public async Task<IActionResult> GetAll(CancellationToken ct = default)
+    private readonly ICommandDispatcher _commandDispatcher;
+
+    public UsersController(ICommandDispatcher commandDispatcher)
     {
-        var usernames = new List<string>
-        {
-            "john.doe",
-            "mary.smith",
-            "james.wilson",
-            "sarah.jones",
-            "michael.brown",
-            "linda.davis",
-            "robert.miller",
-            "emily.walker",
-            "david.thompson",
-            "olivia.harris"
-        };
-        
-        return Ok(usernames);
+        _commandDispatcher = commandDispatcher;
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Create(CancellationToken cancellationToken = default)
+    {
+        var user = await _commandDispatcher.Send(new CreateUserCommand(), cancellationToken);
+
+        return Ok(user.UserId);
     }
 }

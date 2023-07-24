@@ -2,5 +2,5 @@
 
 public static class JwtConfig
 {
-    public const string SecurityKey = "QsFUHwlODrDQBeABfN4eh3MpUJI1038W";
+    public const string SecurityKey = "qooF4AaoDmarZ5lAPGKDY5FR9gNpNOMn";
 }

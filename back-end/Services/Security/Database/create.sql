@@ -37,12 +37,20 @@ create table sec.users (
     email                   varchar(50) not null,
     first_name              varchar(50) not null,
     last_name               varchar(50) not null,
-    role_id                 uuid not null,
 
     -- pk --
     constraint pk_users primary key (user_id),
     -- ix --
-    constraint ix_users unique (user_name),
+    constraint ix_users unique (user_name)
+);
+
+create table sec.users_roles (
+    user_id                 uuid not null,
+    role_id                 uuid not null,
+    
+    -- pk --
+    constraint pk_users_roles primary key (user_id, role_id),
     -- fk --
-    constraint fk_users_roles foreign key (role_id) references sec.roles (role_id)
+    constraint fk_users_roles_users foreign key (user_id) references sec.users (user_id),
+    constraint fk_users_roles_roles foreign key (role_id) references sec.roles (role_id)
 );

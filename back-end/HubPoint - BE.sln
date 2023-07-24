@@ -23,6 +23,18 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HubPoint.Services.Common.In
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HubPoint.Services.Common.Contracts", "Services\Common\HubPoint.Services.Common.Contracts\HubPoint.Services.Common.Contracts.csproj", "{17826CC3-DD3F-480F-ABDD-49DFDE372D36}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E2043DEB-464C-4679-8408-CC66B4757106}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yml = docker-compose.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{41425B91-1F0B-4FC7-90E5-F7022DE0CD93}"
+	ProjectSection(SolutionItems) = preProject
+		Services\Security\Database\create.sql = Services\Security\Database\create.sql
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HubPoint.Services.Common.Abstractions", "Services\Common\HubPoint.Services.Common.Abstractions\HubPoint.Services.Common.Abstractions.csproj", "{B04DDD4F-F0D5-4D8E-8BF2-833C629919DE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +52,8 @@ Global
 		{8B22FF14-090F-4E71-9899-E3C60DA064E9} = {E1625715-1BD0-440F-9D62-67A4D735A1AB}
 		{8CA07A61-108B-4F2C-8CEF-B3F1EF53E930} = {520001E7-EC18-4C7F-9AE6-8790DBEC2CA1}
 		{17826CC3-DD3F-480F-ABDD-49DFDE372D36} = {520001E7-EC18-4C7F-9AE6-8790DBEC2CA1}
+		{41425B91-1F0B-4FC7-90E5-F7022DE0CD93} = {E1625715-1BD0-440F-9D62-67A4D735A1AB}
+		{B04DDD4F-F0D5-4D8E-8BF2-833C629919DE} = {520001E7-EC18-4C7F-9AE6-8790DBEC2CA1}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{C682558D-281A-405F-9794-1A6E74BC7767}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -62,5 +76,9 @@ Global
 		{17826CC3-DD3F-480F-ABDD-49DFDE372D36}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17826CC3-DD3F-480F-ABDD-49DFDE372D36}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{17826CC3-DD3F-480F-ABDD-49DFDE372D36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B04DDD4F-F0D5-4D8E-8BF2-833C629919DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B04DDD4F-F0D5-4D8E-8BF2-833C629919DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B04DDD4F-F0D5-4D8E-8BF2-833C629919DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B04DDD4F-F0D5-4D8E-8BF2-833C629919DE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

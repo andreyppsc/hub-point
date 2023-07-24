@@ -20,11 +20,11 @@
           "Port": 5102
         }
       ],
-      "UpstreamPathTemplate": "/api/security/{catch-all}",
+      "UpstreamPathTemplate": "/api/security/{catch-all}"/*,
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer",
         "AllowedScopes": []
-      }
+      }*/
     }
   ],
   "GlobalConfiguration": {

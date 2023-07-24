@@ -6,12 +6,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddMassTransit(cfg =>
 {
+    cfg.AddConsumer<UserCreatedIntegrationEventHandler>();
+    
     cfg.UsingRabbitMq((ctx, rbt) =>
     {
-        rbt.Host("172.29.14.167", "/", h =>
+        rbt.Host("localhost", "/", h =>
         {
-            h.Username("hubpoint");
-            h.Password("hubpoint.2023");
+            h.Username("guest");
+            h.Password("guest");
         });
         
         rbt.ConfigureEndpoints(ctx);
