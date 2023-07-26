@@ -13,20 +13,27 @@ builder.Services.AddSingleton<ICommandDispatcher, CommandDispatcher>();
 
 builder.Services.AddMassTransit(cfg =>
 {
+    cfg.SetEndpointNameFormatter(new KebabCaseEndpointNameFormatter("dev", false));
+    // cfg.SetKebabCaseEndpointNameFormatter();
     
-    cfg.AddMediator(opts =>
+    /*cfg.AddMediator(opts =>
     {
         opts.AddConsumer<CreateUserCommandHandler>();
         opts.AddConsumer<UserCreatedHandler>();
-    });
+    });*/
+    
+    cfg.AddConsumer<CreateUserCommandHandler>();
+    cfg.AddConsumer<UserCreatedHandler>();
 
     cfg.UsingRabbitMq((ctx, rbt) =>
     {
-        rbt.Host(builder.Configuration["RabbitMQ:Host"], "/", h =>
+        rbt.Host(builder.Configuration["RabbitMQ:Host"], "hub-point", h =>
         {
             h.Username(builder.Configuration["RabbitMQ:Username"]);
             h.Password(builder.Configuration["RabbitMQ:Password"]);
         });
+
+        rbt.UseInMemoryOutbox();
 
         rbt.ConfigureEndpoints(ctx);
     });

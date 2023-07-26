@@ -1,5 +1,6 @@
 ﻿using HubPoint.Services.Common.Abstractions.Commands;
 using HubPoint.Services.Security.Api.Application;
+using MassTransit;
 using MassTransit.Mediator;
 
 namespace HubPoint.Services.Security.Api.Controllers;
@@ -8,9 +9,9 @@ namespace HubPoint.Services.Security.Api.Controllers;
 [Route("users")]
 public class UsersController : ControllerBase
 {
-    private readonly ICommandDispatcher _commandDispatcher;
+    private readonly IBus _commandDispatcher;
 
-    public UsersController(ICommandDispatcher commandDispatcher)
+    public UsersController(IBus commandDispatcher)
     {
         _commandDispatcher = commandDispatcher;
     }
@@ -18,8 +19,11 @@ public class UsersController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create(CancellationToken cancellationToken = default)
     {
-        var user = await _commandDispatcher.Send(new CreateUserCommand(), cancellationToken);
+        //var user = await _commandDispatcher.Send(new CreateUserCommand(), cancellationToken);
 
-        return Ok(user.UserId);
+        var client = _commandDispatcher.CreateRequestClient<CreateUserCommand>();
+        var response = await client.GetResponse<UserDto>(new CreateUserCommand(), cancellationToken);
+
+        return Ok(response.Message.UserId);
     }
 }

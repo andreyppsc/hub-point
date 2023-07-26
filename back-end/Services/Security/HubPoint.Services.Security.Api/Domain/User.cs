@@ -3,7 +3,7 @@ using MassTransit;
 
 namespace HubPoint.Services.Security.Api.Domain;
 
-internal class User : EntityBase
+public class User : EntityBase
 {
     public Guid UserId { get; private set; }
 
@@ -11,6 +11,6 @@ internal class User : EntityBase
     {
         UserId = NewId.NextGuid();
 
-        //AddDomainEvent(new UserCreated { UserId = UserId });
+        AddDomainEvent(new UserCreated { UserId = UserId });
     }
 }

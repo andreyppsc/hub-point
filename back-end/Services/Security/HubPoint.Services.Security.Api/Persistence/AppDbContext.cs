@@ -5,20 +5,20 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HubPoint.Services.Security.Api.Persistence;
 
-internal class AppDbContext : DbContext
+public class AppDbContext : DbContext
 {
     private readonly IPublishEndpoint _publishEndpoint;
-    private readonly IBus _bus;
+    private readonly ILogger<AppDbContext> _logger;
 
     public DbSet<User> Users { get; set; } = default!;
     
-    public AppDbContext(DbContextOptions<AppDbContext> options, IPublishEndpoint publishEndpoint, IBus bus) : base(options)
+    public AppDbContext(DbContextOptions<AppDbContext> options, IPublishEndpoint publishEndpoint, ILogger<AppDbContext> logger) : base(options)
     {
         _publishEndpoint = publishEndpoint;
-        _bus = bus;
+        _logger = logger;
     }
 
-    /*public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         var entries = ChangeTracker
             .Entries<EntityBase>()
@@ -26,9 +26,10 @@ internal class AppDbContext : DbContext
 
         foreach (var entry in entries)
         {
-            foreach (var @event in entry.Entity.DomainEvents!)
+            foreach (var domainEvent in entry.Entity.DomainEvents!)
             {
-                await _publishEndpoint.Publish(@event, cancellationToken);
+                _logger.LogInformation("publishing event {Event}", domainEvent.GetType().Name);
+                await _publishEndpoint.Publish(domainEvent, cancellationToken);
                 //await _bus.Publish(@event, cancellationToken);
             }
             
@@ -38,5 +39,5 @@ internal class AppDbContext : DbContext
         // await Task.Delay(10000, cancellationToken);
 
         return await base.SaveChangesAsync(cancellationToken);
-    }*/
+    }
 }

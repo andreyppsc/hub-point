@@ -2,7 +2,7 @@ using HubPoint.Services.Common.Abstractions.Queries;
 using MassTransit.Mediator;
 
 namespace HubPoint.Services.Common.Infrastructure.Dispatchers;
-
+/*
 public sealed class QueryDispatcher : IQueryDispatcher
 {
     private readonly IMediator _mediator;
@@ -19,3 +19,4 @@ public sealed class QueryDispatcher : IQueryDispatcher
         return response.Message;
     }
 }
+*/

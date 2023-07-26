@@ -6,14 +6,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddMassTransit(cfg =>
 {
+    cfg.SetEndpointNameFormatter(new KebabCaseEndpointNameFormatter("dev", false));
     cfg.AddConsumer<UserCreatedIntegrationEventHandler>();
     
     cfg.UsingRabbitMq((ctx, rbt) =>
     {
-        rbt.Host("localhost", "/", h =>
+        rbt.Host("172.29.14.167", "hub-point", h =>
         {
-            h.Username("guest");
-            h.Password("guest");
+            h.Username("hubpoint");
+            h.Password("hubpoint.2023");
         });
         
         rbt.ConfigureEndpoints(ctx);

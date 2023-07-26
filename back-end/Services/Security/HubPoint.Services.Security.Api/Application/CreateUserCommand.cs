@@ -1,5 +1,7 @@
 using HubPoint.Services.Common.Abstractions.Commands;
+using HubPoint.Services.Security.Api.Domain;
 using HubPoint.Services.Security.Api.Domain.Events;
+using HubPoint.Services.Security.Api.Persistence;
 using MassTransit;
 
 namespace HubPoint.Services.Security.Api.Application;
@@ -19,30 +21,40 @@ public class UserDto
     }
 }
 
-public class CreateUserCommand : ICommand<UserDto>
+public class CreateUserCommand
 {
     
 }
 
-public class CreateUserCommandHandler : CommandHandler<CreateUserCommand, UserDto>
+public class CreateUserCommandHandler : IConsumer<CreateUserCommand>
 {
     private readonly ILogger<CreateUserCommandHandler> _logger;
-    private readonly IPublishEndpoint _publishEndpoint;
+    private readonly AppDbContext _context;
 
-    public CreateUserCommandHandler(ILogger<CreateUserCommandHandler> logger, IPublishEndpoint publishEndpoint)
+    public CreateUserCommandHandler(ILogger<CreateUserCommandHandler> logger, AppDbContext context)
     {
         _logger = logger;
-        _publishEndpoint = publishEndpoint;
+        _context = context;
     }
 
-    protected override async Task<UserDto> Handle(CreateUserCommand request, CancellationToken cancellationToken)
+    public async Task Consume(ConsumeContext<CreateUserCommand> context)
     {
         _logger.LogInformation("handling command");
 
-        var userId = Guid.NewGuid();
+        var user = new User();
 
-        await _publishEndpoint.Publish<UserCreated>(new { UserId = userId, __CorrelationId = userId }, cancellationToken);
+        _context.Users.Add(user);
+
+        //await context.Publish<UserCreated>(new { user.UserId, __CorrelationId = user.UserId });
+
+        _logger.LogInformation("wait 5 seconds then save to db");
+        await Task.Delay(5000);
+
+        await _context.SaveChangesAsync(context.CancellationToken);
         
-        return new UserDto(userId);
+        _logger.LogInformation("wait 5 seconds before replying");
+        await Task.Delay(5000);
+
+        await context.RespondAsync(new UserDto(user.UserId));
     }
 }
