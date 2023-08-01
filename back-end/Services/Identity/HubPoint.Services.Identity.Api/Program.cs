@@ -1,37 +1,23 @@
-using HubPoint.Services.Common.Contracts.Requests;
-using HubPoint.Services.Identity.Api;
-using Microsoft.AspNetCore.Mvc;
+using HubPoint.Services.Common.Abstractions.Commands;
+using HubPoint.Services.Common.Infrastructure;
+using HubPoint.Services.Common.Infrastructure.Dispatchers;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddMassTransit(cfg =>
-{
-    cfg.SetEndpointNameFormatter(new KebabCaseEndpointNameFormatter("dev", false));
-    cfg.AddConsumer<UserCreatedIntegrationEventHandler>();
-    
-    cfg.UsingRabbitMq((ctx, rbt) =>
-    {
-        rbt.Host("172.29.14.167", "hub-point", h =>
-        {
-            h.Username("hubpoint");
-            h.Password("hubpoint.2023");
-        });
-        
-        rbt.ConfigureEndpoints(ctx);
-    });
-});
-
 builder.Services.AddSingleton<TokenService>();
+
+builder.Services.AddRabbitMq();
+
+builder.Services.AddScoped<ICommandDispatcher, CommandDispatcher>();
 
 var app = builder.Build();
 
-app.MapPost("/token/generate",  async ([FromBody] GenerateTokenRequest request, TokenService service, IRequestClient<GetUser> client, ILogger<Program> logger, CancellationToken ct) =>
-{
-    logger.LogInformation("Requested {UserName}", request.UserName);
-    var response = await client.GetResponse<GetUserResult>(new { request.UserName }, ct);
-    return response.Message.UserName.Equals(request.UserName) ? service.GenerateToken() : "";
-});
+app.MapPost("/token/generate",  ([FromBody] GenerateTokenRequest request, TokenService service) => service.GenerateToken());
 
-app.MapGet("/", () => NewId.Next().ToString());
+app.MapPost("/", async ([FromBody] TestCommand command, ICommandDispatcher dispatcher, ILogger<Program> logger) =>
+{
+    logger.LogInformation("{Message}", command.Message);
+    await dispatcher.Send(command);
+});
 
 app.Run();

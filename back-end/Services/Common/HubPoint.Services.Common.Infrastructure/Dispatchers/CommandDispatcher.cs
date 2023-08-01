@@ -1,30 +1,36 @@
+using System.Text.Json;
 using HubPoint.Services.Common.Abstractions.Commands;
-using MassTransit;
+using RabbitMQ.Client;
 
 namespace HubPoint.Services.Common.Infrastructure.Dispatchers;
 
 public class CommandDispatcher : ICommandDispatcher
 {
-    private readonly IBus _bus;
-    private readonly IServiceProvider _provider;
+    private readonly IConnection _connection;
 
-    public CommandDispatcher(IBus bus, IServiceProvider provider)
+    public CommandDispatcher(IConnection connection)
     {
-        _bus = bus;
-        _provider = provider;
+        _connection = connection;
     }
 
-    public async Task Send(ICommand command, CancellationToken cancellationToken = default)
+    public Task Send(ICommand command, CancellationToken cancellationToken = default)
     {
-        var endpoint  = await _bus.GetSendEndpoint(_bus.Address);
-        await endpoint.Send(command, cancellationToken);
+        using var channel = _connection.CreateModel();
+        channel.QueueDeclare("test", false, false, true, null);
+
+        var message = JsonSerializer.Serialize(command, command.GetType(), new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        });
+        var body = Encoding.UTF8.GetBytes(message);
+        
+        channel.BasicPublish(string.Empty, "test", body: body);
+        
+        return Task.CompletedTask;
     }
 
-    public async Task<TResponse> Send<TResponse>(ICommand<TResponse> command, CancellationToken cancellationToken = default) where TResponse : class
+    public Task<TResponse> Send<TResponse>(ICommand<TResponse> command, CancellationToken cancellationToken = default)
     {
-        var clientFactory = _provider.GetRequiredService<IClientFactory>();
-        var client = clientFactory.CreateRequestClient<ICommand<TResponse>>(_bus.Address);
-        var response = await client.GetResponse<TResponse>(command, cancellationToken);
-        return response.Message;
+        throw new NotImplementedException();
     }
 }
