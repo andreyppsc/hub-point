@@ -1,9 +1,12 @@
+using HubPoint.Services.Common.Abstractions.Events;
 using HubPoint.Services.Common.Infrastructure.Events;
 using HubPoint.Services.Common.Infrastructure.Jwt;
 using HubPoint.Services.Security.Api.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddScoped<IOutbox, InMemoryOutbox>();
 
 builder.Services.AddMediatR(c =>
 {

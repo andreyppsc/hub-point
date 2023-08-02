@@ -14,13 +14,14 @@ public class IntegrationEventsPublisher : INotificationPublisher
 
     public async Task Publish(IEnumerable<NotificationHandlerExecutor> handlerExecutors, INotification notification, CancellationToken cancellationToken)
     {
-        foreach (var handler in handlerExecutors)
+        if (notification is IIntegrationEvent integrationEvent)
         {
-            if (notification is IIntegrationEvent integrationEvent)
-            {
-                _outbox.Add(integrationEvent);
-            }
-            
+            _outbox.Add(integrationEvent);
+            return;
+        }
+        
+        foreach (var handler in handlerExecutors)
+        {   
             await handler.HandlerCallback(notification, cancellationToken);
         }
     }

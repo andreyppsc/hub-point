@@ -1,5 +1,5 @@
 using HubPoint.Services.Common.Abstractions.Domain;
-using HubPoint.Services.Security.Api.Domain.Events;
+using HubPoint.Services.IntegrationEvents;
 
 namespace HubPoint.Services.Security.Api.Domain;
 
