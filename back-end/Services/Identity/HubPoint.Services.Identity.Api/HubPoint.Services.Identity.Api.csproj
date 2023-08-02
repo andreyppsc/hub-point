@@ -7,7 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Common\HubPoint.Services.Common.Contracts\HubPoint.Services.Common.Contracts.csproj" />
       <ProjectReference Include="..\..\Common\HubPoint.Services.Common.Infrastructure\HubPoint.Services.Common.Infrastructure.csproj" />
     </ItemGroup>
 

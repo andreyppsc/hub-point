@@ -1,45 +1,19 @@
-using HubPoint.Services.Common.Abstractions.Commands;
-using HubPoint.Services.Common.Infrastructure.Dispatchers;
+using HubPoint.Services.Common.Infrastructure.Events;
 using HubPoint.Services.Common.Infrastructure.Jwt;
-using HubPoint.Services.Security.Api.Application;
-using HubPoint.Services.Security.Api.Domain.Events;
-using HubPoint.Services.Security.Api.Persistence;
-using MassTransit;
+using HubPoint.Services.Security.Api.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddSingleton<ICommandDispatcher, CommandDispatcher>();
-
-builder.Services.AddMassTransit(cfg =>
+builder.Services.AddMediatR(c =>
 {
-    cfg.SetEndpointNameFormatter(new KebabCaseEndpointNameFormatter("dev", false));
-    // cfg.SetKebabCaseEndpointNameFormatter();
-    
-    /*cfg.AddMediator(opts =>
-    {
-        opts.AddConsumer<CreateUserCommandHandler>();
-        opts.AddConsumer<UserCreatedHandler>();
-    });*/
-    
-    cfg.AddConsumer<CreateUserCommandHandler>();
-    cfg.AddConsumer<UserCreatedHandler>();
-
-    cfg.UsingRabbitMq((ctx, rbt) =>
-    {
-        rbt.Host(builder.Configuration["RabbitMQ:Host"], "hub-point", h =>
-        {
-            h.Username(builder.Configuration["RabbitMQ:Username"]);
-            h.Password(builder.Configuration["RabbitMQ:Password"]);
-        });
-
-        rbt.UseInMemoryOutbox();
-
-        rbt.ConfigureEndpoints(ctx);
-    });
+    c.RegisterServicesFromAssemblyContaining<Program>();
+    c.AddOpenRequestPostProcessor(typeof(CommitPostProcessor<,>));
+    c.AddOpenRequestPostProcessor(typeof(OutboxProcessor<,>));
+    c.NotificationPublisherType = typeof(IntegrationEventsPublisher);
 });
 
-builder.Services.AddDbContext<AppDbContext>(opts => opts.UseInMemoryDatabase("hubpoint"));
+builder.Services.AddDbContext<AppDbContext>(opts => opts.UseInMemoryDatabase("hub-point"));
 
 // builder.Services.AddDbContext<AppDbContext>(opts => opts.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
 

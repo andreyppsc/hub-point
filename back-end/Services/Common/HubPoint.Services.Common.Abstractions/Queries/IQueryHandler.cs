@@ -1,4 +1,6 @@
+using MediatR;
+
 namespace HubPoint.Services.Common.Abstractions.Queries;
 
-public interface IQueryHandler<in TQuery, out TResponse>
+public interface IQueryHandler<in TQuery, TResponse> : IRequestHandler<TQuery, TResponse>
     where TQuery : IQuery<TResponse> { }

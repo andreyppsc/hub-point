@@ -1,5 +1,7 @@
+using MediatR;
+
 namespace HubPoint.Services.Common.Abstractions.Commands;
 
-public interface ICommand { }
+public interface ICommand : IRequest { }
 
-public interface ICommand<out TResponse> { }
+public interface ICommand<out TResponse> : IRequest<TResponse> { }

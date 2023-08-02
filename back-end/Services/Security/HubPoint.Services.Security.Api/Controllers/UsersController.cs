@@ -1,7 +1,6 @@
-﻿using HubPoint.Services.Common.Abstractions.Commands;
-using HubPoint.Services.Security.Api.Application;
-using MassTransit;
-using MassTransit.Mediator;
+﻿using HubPoint.Services.Security.Api.Application.Commands;
+using HubPoint.Services.Security.Api.Application.Queries;
+using MediatR;
 
 namespace HubPoint.Services.Security.Api.Controllers;
 
@@ -9,21 +8,22 @@ namespace HubPoint.Services.Security.Api.Controllers;
 [Route("users")]
 public class UsersController : ControllerBase
 {
-    private readonly IBus _commandDispatcher;
+    private readonly IMediator _mediator;
 
-    public UsersController(IBus commandDispatcher)
+    public UsersController(IMediator mediator)
     {
-        _commandDispatcher = commandDispatcher;
+        _mediator = mediator;
+    }
+
+    public async Task<IActionResult> GetAll(CancellationToken cancellationToken = default)
+    {
+        return Ok(await _mediator.Send(new GetAllUserQuery(), cancellationToken));
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(CancellationToken cancellationToken = default)
+    public async Task<IActionResult> Create(CreateUserCommand command, CancellationToken cancellationToken = default)
     {
-        //var user = await _commandDispatcher.Send(new CreateUserCommand(), cancellationToken);
-
-        var client = _commandDispatcher.CreateRequestClient<CreateUserCommand>();
-        var response = await client.GetResponse<UserDto>(new CreateUserCommand(), cancellationToken);
-
-        return Ok(response.Message.UserId);
+        await _mediator.Send(command, cancellationToken);
+        return Ok();
     }
 }
