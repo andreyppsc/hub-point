@@ -1,3 +1,4 @@
+using EasyNetQ;
 using HubPoint.Services.Common.Abstractions.Events;
 using HubPoint.Services.Common.Infrastructure.Events;
 using HubPoint.Services.Common.Infrastructure.Jwt;
@@ -15,6 +16,8 @@ builder.Services.AddMediatR(c =>
     c.AddOpenRequestPostProcessor(typeof(OutboxProcessor<,>));
     c.NotificationPublisherType = typeof(IntegrationEventsPublisher);
 });
+
+builder.Services.RegisterEasyNetQ(builder.Configuration.GetConnectionString("RabbitMQ"), s => s.EnableSystemTextJson());
 
 builder.Services.AddDbContext<AppDbContext>(opts => opts.UseInMemoryDatabase("hub-point"));
 

@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\Common\HubPoint.Services.Common.Infrastructure\HubPoint.Services.Common.Infrastructure.csproj" />
+      <ProjectReference Include="..\..\Security\HubPoint.Services.Security.Events\HubPoint.Services.Security.Events.csproj" />
     </ItemGroup>
 
 </Project>

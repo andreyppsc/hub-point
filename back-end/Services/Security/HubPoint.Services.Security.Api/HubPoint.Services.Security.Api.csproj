@@ -13,10 +13,12 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\Common\HubPoint.Services.Common.Infrastructure\HubPoint.Services.Common.Infrastructure.csproj" />
+      <ProjectReference Include="..\HubPoint.Services.Security.Events\HubPoint.Services.Security.Events.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <Folder Include="Application\Events\" />
+      <Folder Include="Domain\Events\" />
     </ItemGroup>
 
 </Project>

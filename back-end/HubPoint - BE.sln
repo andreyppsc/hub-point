@@ -33,6 +33,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{41
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HubPoint.Services.Common.Abstractions", "Services\Common\HubPoint.Services.Common.Abstractions\HubPoint.Services.Common.Abstractions.csproj", "{B04DDD4F-F0D5-4D8E-8BF2-833C629919DE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HubPoint.Services.Security.Events", "Services\Security\HubPoint.Services.Security.Events\HubPoint.Services.Security.Events.csproj", "{FF9B1885-F29F-416C-BFB1-69FB7F80728C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,7 @@ Global
 		{8CA07A61-108B-4F2C-8CEF-B3F1EF53E930} = {520001E7-EC18-4C7F-9AE6-8790DBEC2CA1}
 		{41425B91-1F0B-4FC7-90E5-F7022DE0CD93} = {E1625715-1BD0-440F-9D62-67A4D735A1AB}
 		{B04DDD4F-F0D5-4D8E-8BF2-833C629919DE} = {520001E7-EC18-4C7F-9AE6-8790DBEC2CA1}
+		{FF9B1885-F29F-416C-BFB1-69FB7F80728C} = {E1625715-1BD0-440F-9D62-67A4D735A1AB}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{C682558D-281A-405F-9794-1A6E74BC7767}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -73,5 +76,9 @@ Global
 		{B04DDD4F-F0D5-4D8E-8BF2-833C629919DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B04DDD4F-F0D5-4D8E-8BF2-833C629919DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B04DDD4F-F0D5-4D8E-8BF2-833C629919DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF9B1885-F29F-416C-BFB1-69FB7F80728C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF9B1885-F29F-416C-BFB1-69FB7F80728C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF9B1885-F29F-416C-BFB1-69FB7F80728C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF9B1885-F29F-416C-BFB1-69FB7F80728C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
