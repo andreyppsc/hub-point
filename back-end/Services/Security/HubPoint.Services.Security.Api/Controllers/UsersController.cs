@@ -17,11 +17,11 @@ public class UsersController : ControllerBase
 
     public async Task<IActionResult> GetAll(CancellationToken cancellationToken = default)
     {
-        return Ok(await _mediator.Send(new GetAllUserQuery(), cancellationToken));
+        return Ok(await _mediator.Send(new GetAllUsers(), cancellationToken));
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(CreateUserCommand command, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> Create(CreateUser command, CancellationToken cancellationToken = default)
     {
         await _mediator.Send(command, cancellationToken);
         return Ok();

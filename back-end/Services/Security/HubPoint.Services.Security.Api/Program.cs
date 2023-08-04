@@ -1,33 +1,24 @@
-using EasyNetQ;
-using HubPoint.Services.Common.Abstractions.Events;
-using HubPoint.Services.Common.Infrastructure.Events;
-using HubPoint.Services.Common.Infrastructure.Jwt;
+using HubPoint.Services.Common.Infrastructure;
 using HubPoint.Services.Security.Api.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddScoped<IOutbox, InMemoryOutbox>();
+builder.Services.AddDbContext<SecurityDbContext>(opts => opts.UseInMemoryDatabase("hub-point"));
 
-builder.Services.AddMediatR(c =>
+builder.Services.AddInfrastructure(c =>
 {
-    c.RegisterServicesFromAssemblyContaining<Program>();
-    c.AddOpenRequestPostProcessor(typeof(CommitPostProcessor<,>));
-    c.AddOpenRequestPostProcessor(typeof(OutboxProcessor<,>));
-    c.NotificationPublisherType = typeof(IntegrationEventsPublisher);
+    c.RabbitMqConnectionString = builder.Configuration.GetConnectionString("RabbitMQ");
+    c.AddPostProcessor(typeof(CommitProcessor<,>));
 });
 
-builder.Services.RegisterEasyNetQ(builder.Configuration.GetConnectionString("RabbitMQ"), s => s.EnableSystemTextJson());
 
-builder.Services.AddDbContext<AppDbContext>(opts => opts.UseInMemoryDatabase("hub-point"));
 
 // builder.Services.AddDbContext<AppDbContext>(opts => opts.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
 
 builder.Services.AddControllers();
 
 builder.Services.AddHealthChecks();
-
-builder.Services.AddJwtAuthentication();
 
 var app = builder.Build();
 

@@ -1,18 +1,27 @@
-using EasyNetQ;
+using HubPoint.Services.Common.Infrastructure;
 using HubPoint.Services.Common.Infrastructure.Events;
-using HubPoint.Services.Security.Events;
+using HubPoint.Services.Identity.Api.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSingleton<TokenService>();
 
-builder.Services.RegisterEasyNetQ(builder.Configuration.GetConnectionString("RabbitMQ"), s => s.EnableSystemTextJson());
+builder.Services.AddDbContext<IdentityDbContext>(opts => opts.UseInMemoryDatabase("hub-point-2"));
+
+builder.Services.AddInfrastructure(c =>
+{
+    c.RabbitMqConnectionString = builder.Configuration.GetConnectionString("RabbitMQ");
+    c.AddPostProcessor(typeof(CommitProcessor<,>));
+});
 
 var app = builder.Build();
 
-app.MapPost("/token/generate",  ([FromBody] GenerateTokenRequest request, TokenService service) => service.GenerateToken());
+app.MapPost("/token/generate",  ([FromBody] GenerateTokenRequest request, [FromServices] TokenService service) => service.GenerateToken());
 
-app.AddSubscribers(typeof(UserCreated));
+app.MapGet("/integration/users", async ([FromServices] IdentityDbContext context) => await context.Users.ToListAsync());
+
+app.UseIntegrationEvents("idt");
 
 app.Run();
 

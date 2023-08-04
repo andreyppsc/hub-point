@@ -1,22 +1,18 @@
-using HubPoint.Services.Common.Abstractions.Domain;
-using HubPoint.Services.Security.Api.Domain;
-using MediatR;
+﻿using HubPoint.Services.Common.Abstractions.Domain;
 using Microsoft.EntityFrameworkCore;
 
-namespace HubPoint.Services.Security.Api.Infrastructure;
+namespace HubPoint.Services.Common.Infrastructure.Persistence;
 
-public class AppDbContext : DbContext
+public abstract class DbContextBase : DbContext
 {
     private readonly IMediator _mediator;
 
-    public DbSet<User> Users { get; set; } = default!;
-    
-    public AppDbContext(DbContextOptions<AppDbContext> options, IMediator mediator) : base(options)
+    protected DbContextBase(DbContextOptions options, IMediator mediator) : base(options)
     {
         _mediator = mediator;
     }
 
-    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
     {
         var entries = ChangeTracker
             .Entries<EntityBase>()
@@ -31,7 +27,7 @@ public class AppDbContext : DbContext
             
             entry.Entity.ClearDomainEvents();;
         }
-
+        
         return await base.SaveChangesAsync(cancellationToken);
     }
 }

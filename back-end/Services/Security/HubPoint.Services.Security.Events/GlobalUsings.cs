@@ -1,5 +1,2 @@
-﻿namespace HubPoint.Services.Security.Events;
-
-public class GlobalUsings
-{
-}
+﻿global using EasyNetQ;
+global using HubPoint.Services.Common.Abstractions.Events;

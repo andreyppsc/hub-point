@@ -4,25 +4,26 @@ using HubPoint.Services.Security.Api.Infrastructure;
 
 namespace HubPoint.Services.Security.Api.Application.Commands;
 
-public class CreateUserCommand : ICommand
+public class CreateUser : ICommand
 {
     public string Name { get; set; } = default!;
     public string Password { get; set; } = default!;
 }
 
-public class CreateUserCommandHandler : ICommandHandler<CreateUserCommand>
+public class CreateUserHandler : ICommandHandler<CreateUser>
 {
-    private readonly AppDbContext _context;
+    private readonly SecurityDbContext _context;
 
-    public CreateUserCommandHandler(AppDbContext context)
+    public CreateUserHandler(SecurityDbContext context)
     {
         _context = context;
     }
 
-    public async Task Handle(CreateUserCommand request, CancellationToken cancellationToken)
+    public Task Handle(CreateUser request, CancellationToken cancellationToken)
     {
         var user = new User(request.Name, request.Password);
         _context.Users.Add(user);
-        // return Unit.Value;
+
+        return Task.CompletedTask;
     }
 }

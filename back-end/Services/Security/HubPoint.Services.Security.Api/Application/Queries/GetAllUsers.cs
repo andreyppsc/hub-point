@@ -5,18 +5,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HubPoint.Services.Security.Api.Application.Queries;
 
-public class GetAllUserQuery : IQuery<List<User>> { }
+public class GetAllUsers : IQuery<List<User>> { }
 
-public class GetAllUserQueryHandler : IQueryHandler<GetAllUserQuery, List<User>>
+public class GetAllUsersHandler : IQueryHandler<GetAllUsers, List<User>>
 {
-    private readonly AppDbContext _context;
+    private readonly SecurityDbContext _context;
 
-    public GetAllUserQueryHandler(AppDbContext context)
+    public GetAllUsersHandler(SecurityDbContext context)
     {
         _context = context;
     }
 
-    public async Task<List<User>> Handle(GetAllUserQuery request, CancellationToken cancellationToken)
+    public async Task<List<User>> Handle(GetAllUsers request, CancellationToken cancellationToken)
     {
         return await _context.Users.ToListAsync(cancellationToken: cancellationToken);
     }

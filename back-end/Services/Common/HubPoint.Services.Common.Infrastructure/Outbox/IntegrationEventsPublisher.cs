@@ -1,9 +1,6 @@
-﻿using HubPoint.Services.Common.Abstractions.Events;
-using MediatR;
+﻿namespace HubPoint.Services.Common.Infrastructure.Outbox;
 
-namespace HubPoint.Services.Common.Infrastructure.Events;
-
-public class IntegrationEventsPublisher : INotificationPublisher
+internal class IntegrationEventsPublisher : INotificationPublisher
 {
     private readonly IOutbox _outbox;
 

@@ -1,7 +1,4 @@
-﻿using HubPoint.Services.Common.Abstractions.Events;
-using MediatR.Pipeline;
-
-namespace HubPoint.Services.Common.Infrastructure.Events;
+﻿namespace HubPoint.Services.Common.Infrastructure.Outbox;
 
 public class OutboxProcessor<TRequest, TResponse> : IRequestPostProcessor<TRequest, TResponse>
     where TRequest : notnull

@@ -11,4 +11,12 @@
       <ProjectReference Include="..\..\Security\HubPoint.Services.Security.Events\HubPoint.Services.Security.Events.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Application\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.20" />
+    </ItemGroup>
+
 </Project>

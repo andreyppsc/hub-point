@@ -1,8 +1,6 @@
 using HubPoint.Services.Common.Abstractions.Domain;
 using HubPoint.Services.Security.Events;
 
-// using HubPoint.Services.Common.Events;
-
 namespace HubPoint.Services.Security.Api.Domain;
 
 public class User : EntityBase
@@ -21,6 +19,6 @@ public class User : EntityBase
         UserName = userName;
         HashedPassword = hashedPassword;
         
-        AddDomainEvent(new UserCreated { UserId = UserId });
+        AddDomainEvent(new UserCreated { UserId = UserId, UserName = userName});
     }
 }
